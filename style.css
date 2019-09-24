@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "Arcade Classic";
+    src: url(Resources/Fonts/ARCADECLASSIC.TTF) format("truetype");
+  }
+
+button {
+    color: black;
+    background-color: white;
+    font-family: "Arcade Classic";
+    font-size: 12pt;
+    border: 0;
+}
