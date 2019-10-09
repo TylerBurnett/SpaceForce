@@ -14,23 +14,28 @@ class ScoreState {
         // DOM inputs should only be drawn once, hence they are called in the constructor
 
         // Playername input
-        this.nameInput = createInput();
-        this.nameInput.position(150, 150);
+        this.Input_Name = createInput();
+        this.Input_Name.position(150, 150);
 
         // addScore button
-        this.addScore = createButton('Add highscore!');
-        this.addScore.position(150, 180);
-        this.addScore.mousePressed(this.add.bind(this));
+        this.Btn_addScore = createButton('Add highscore!');
+        this.Btn_addScore.position(150, 180);
+        this.Btn_addScore.mousePressed(this.add.bind(this));
 
         // saveScore button
-        this.saveScore = createButton('Save Scores');
-        this.saveScore.position(240, canvasY - 130);
-        this.saveScore.mousePressed(this.save.bind(this));
+        this.Btn_saveScore = createButton('Save Scores');
+        this.Btn_saveScore.position(260, canvasY - 130);
+        this.Btn_saveScore.mousePressed(this.save.bind(this));
 
         // Reset button
-        this.resetButton = createButton('Play Again');
-        this.resetButton.position(150, canvasY - 130);
-        this.resetButton.mousePressed(this.reset);
+        this.Btn_Reset = createButton('Play Again');
+        this.Btn_Reset.position(150, canvasY - 130);
+        this.Btn_Reset.mousePressed(this.playAgain.bind(this));
+
+        // backToMenu button
+        this.Btn_backToMenu = createButton('Back to menu');
+        this.Btn_backToMenu.position(380, canvasY - 130);
+        this.Btn_backToMenu.mousePressed(this.backToMenu.bind(this));
     }
 
     // Main draw function
@@ -67,7 +72,7 @@ class ScoreState {
         let date = day() + "  " + month() + "  " + year();
 
         this.scoreFile['Scores'].push({
-            name: this.nameInput.value(),
+            name: this.Input_Name.value(),
             date: date,
             score: this.score
         });
@@ -81,6 +86,14 @@ class ScoreState {
     // Resets the object, removes DOM inputs
     reset() {
         removeElements();
+    }
+
+    backToMenu() {
+        ChangeState(this, "Back to menu");
+    }
+
+    playAgain() {
+        this.reset();
         ChangeState(this, "Start Game");
     }
 }

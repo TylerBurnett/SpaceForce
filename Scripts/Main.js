@@ -16,7 +16,7 @@ function preload() {
   splashScreen = new SplashScreen(1080, 600);
 
   // I like this font
-  retroFont = loadFont("/Resources/Fonts/ARCADECLASSIC.ttf")
+  retroFont = loadFont("SpaceForce/Resources/Fonts/ARCADECLASSIC.ttf");
 }
 
 function setup() {
@@ -57,7 +57,15 @@ function ChangeState(sender, message) {
 
   //  End game state, called when the player dies by the gameState object.
   if (message == "End Game") {
-    currentState = new ScoreState(1080, 600, "ScoreTable.JSON", sender.Score);
-    setTimeout(sender.reset(), 900);
+    let score = sender.Score;
+    sender.reset();
+    currentState = new ScoreState(1080, 600, "ScoreTable.JSON", score);
+  }
+
+  //  End game state, called when the player dies by the gameState object.
+  if (message == "Back to menu") {
+    sender.reset();
+    splashScreen.loadVideo();
+    currentState = splashScreen;
   }
 }

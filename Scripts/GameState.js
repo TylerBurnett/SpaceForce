@@ -6,19 +6,19 @@ class GameState {
     this.CanvasY = CanvasY;
 
     // Audio
-    this.Sound_Explosion = loadSound("/Resources/Audio/Explosion.wav");
-    this.Sound_Bruh = loadSound("/Resources/Audio/Bruh.wav");
-    this.Sound_Shoot = loadSound("/Resources/Audio/Shoot.wav");
-    this.Sound_Hurt = loadSound("/Resources/Audio/Player_Hurt.wav");
-    this.Sound_Music = loadSound("/Resources/Audio/Music.mp3");
+    this.Sound_Explosion = loadSound("SpaceForce/Resources/Audio/Explosion.wav");
+    this.Sound_Bruh = loadSound("SpaceForce/Resources/Audio/Bruh.wav"); 
+    this.Sound_Shoot = loadSound("SpaceForce/Resources/Audio/Shoot.wav");
+    this.Sound_Hurt = loadSound("SpaceForce/Resources/Audio/Player_Hurt.wav");
+    this.Sound_Music = loadSound("SpaceForce/Resources/Audio/Music.mp3");
     this.Sound_Music.setVolume(0.1);
 
     // Animations
-    this.Anim_ShooterEnemy = new Animation("/Resources/Sprites/ShooterEnemy00.png", "/Resources/Sprites/ShooterEnemy07.png");
-    this.Anim_PlayerBullet = new Animation("/Resources/Sprites/PlayerBullet00.png", "/Resources/Sprites/PlayerBullet07.png");
-    this.Anim_BasicEnemy = new Animation("/Resources/Sprites/BasicEnemy00.png", "/Resources/Sprites/BasicEnemy07.png");
-    this.Anim_Player = new Animation("/Resources/Sprites/Player00.png", "/Resources/Sprites/Player07.png");
-    this.Anim_Explosion = new Animation("/Resources/Sprites/Explosion00.png", "/Resources/Sprites/Explosion04.png");
+    this.Anim_ShooterEnemy = new Animation("SpaceForce/Resources/Sprites/ShooterEnemy00.png", "SpaceForce/Resources/Sprites/ShooterEnemy07.png");
+    this.Anim_PlayerBullet = new Animation("SpaceForce/Resources/Sprites/PlayerBullet00.png", "SpaceForce/Resources/Sprites/PlayerBullet07.png");
+    this.Anim_BasicEnemy = new Animation("SpaceForce/Resources/Sprites/BasicEnemy00.png", "SpaceForce/Resources/Sprites/BasicEnemy07.png");
+    this.Anim_Player = new Animation("SpaceForce/Resources/Sprites/Player00.png", "SpaceForce/Resources/Sprites/Player07.png");
+    this.Anim_Explosion = new Animation("SpaceForce/Resources/Sprites/Explosion00.png", "SpaceForce/Resources/Sprites/Explosion04.png");
 
     // Gameplay Vars
     this.Score = 0;
@@ -29,21 +29,28 @@ class GameState {
     this.PlayerBullets = new Group();
     this.EnemyBullets = new Group();
     this.Enemies = new Group();
+
+    // Back to menu button
+    this.Btn_backToMenu = undefined;
   }
 
   //
   // Game state reset
   //
   reset() {
+    // Remove
+    removeElements();
     allSprites.removeSprites();
+    this.Sound_Music.stop();
+
+    // Re-assign
     this.Score = 0;
     this.FrameCount = 0;
+    this.Btn_backToMenu = undefined;
     this.Player = this.player(this.CanvasX, this.CanvasY);
-    this.scoreState = undefined;
     this.PlayerBullets = new Group();
     this.EnemyBullets = new Group();
     this.Enemies = new Group();
-    this.Sound_Music.stop();
   }
 
   //
@@ -56,9 +63,9 @@ class GameState {
     this.displayScore();
 
     // Collision detection
-    this.PlayerBullets.overlap(this.Enemies, this.enemyHit.bind(this));
-    this.Enemies.overlap(this.Player, this.playerHit.bind(this));
-    this.EnemyBullets.overlap(this.Player, this.playerHit.bind(this));
+    this.PlayerBullets.collide(this.Enemies, this.enemyHit.bind(this));
+    this.Enemies.collide(this.Player, this.playerHit.bind(this));
+    this.EnemyBullets.collide(this.Player, this.playerHit.bind(this));
 
     // Enemies should be generated at an 80 frame interval to avoid overlapping
     if (this.FrameCount > 80) {
@@ -69,6 +76,22 @@ class GameState {
     // Shooter enemies cant independantly decide when to shoot, so it must be iterrated in the draw function.
     for (let enemy of this.Enemies) {
       if (enemy.type == "shooterEnemy" && random(200) <= 1) this.EnemyBullets.add(this.enemyBullet(enemy.position));
+
+      // also fast enemies need to know who to displace
+      if (enemy.type == "fastEnemy") enemy.displace(this.Enemies);
+    }
+
+    // This is used to prevent loose frame calls after state change
+    if (this.FrameCount > 5) {
+
+      if (this.Btn_backToMenu == undefined) {
+        this.Btn_backToMenu = createButton("Back to menu");
+        this.Btn_backToMenu.position(this.CanvasX / 1.5, 30);
+        this.Btn_backToMenu.mousePressed(this.backToMenu.bind(this));
+      }
+
+      // Music is played here to avoid issue of music continually playing when the game state is not active.
+      if (this.Sound_Music.isPlaying() == false) this.Sound_Music.play();
     }
 
     this.FrameCount++;
@@ -90,9 +113,6 @@ class GameState {
 
     if (Key == RIGHT_ARROW)
       this.Player.position.x += 50;
-
-    // Music is played here to avoid issue of music continually playing when the game state is not active.
-    if (this.Sound_Music.isPlaying() == false) this.Sound_Music.play();
   }
 
   //
@@ -100,18 +120,21 @@ class GameState {
   //
   displayScore() {
     // Top bar
-    fill(100);
+    fill(100, 100);
     noStroke();
     rect(0, 0, this.CanvasX, this.CanvasY / 10);
 
     // Score + Lives display
-    fill(0);
+    fill(255);
     textSize(30);
     textAlign(CENTER);
-    text("Score   " + this.Score, this.CanvasX / 10, (this.CanvasY / 10) / 2);
-    text("Lives   " + this.Player.Lives, this.CanvasX / 3, (this.CanvasY / 10) / 2);
+    text("Score   " + this.Score, this.CanvasX / 10, (this.CanvasY / 10) / 1.5);
+    text("Lives   " + this.Player.Lives, this.CanvasX / 3, (this.CanvasY / 10) / 1.5);
   }
 
+  //
+  // Generates a line of enemies based on screen width
+  //
   generateEnemies() {
 
     // Loop through every place on the X axis where an enemy could go. 
@@ -134,10 +157,18 @@ class GameState {
   }
 
   //
+  // Takes the user back to the splash screen
+  // 
+  backToMenu() {
+    ChangeState(this, "Back to menu");
+  }
+
+
+  //
   // Collision callbacks
   //
   playerHit(Enemy, Player) {
-    
+
     this.explosion(Enemy.position);
     Enemy.remove();
 
@@ -235,7 +266,7 @@ class GameState {
   enemyBullet(position) {
     let Sprite = createSprite(position.x, position.y, 0, 0);
     Sprite.addAnimation("Static", this.Anim_PlayerBullet);
-    Sprite.velocity.y = 10;
+    Sprite.velocity.y = 7;
     Sprite.life = 100;
 
     return Sprite;
