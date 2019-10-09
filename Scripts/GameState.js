@@ -6,19 +6,19 @@ class GameState {
     this.CanvasY = CanvasY;
 
     // Audio
-    this.Sound_Explosion = loadSound("/Resources/Audio/Explosion.wav");
-    this.Sound_Bruh = loadSound("/Resources/Audio/Bruh.wav"); 
-    this.Sound_Shoot = loadSound("/Resources/Audio/Shoot.wav");
-    this.Sound_Hurt = loadSound("/Resources/Audio/Player_Hurt.wav");
-    this.Sound_Music = loadSound("/Resources/Audio/Music.mp3");
+    this.Sound_Explosion = loadSound("//Resources/Audio/Explosion.wav");
+    this.Sound_Bruh = loadSound("//Resources/Audio/Bruh.wav"); 
+    this.Sound_Shoot = loadSound("//Resources/Audio/Shoot.wav");
+    this.Sound_Hurt = loadSound("//Resources/Audio/Player_Hurt.wav");
+    this.Sound_Music = loadSound("//Resources/Audio/Music.mp3");
     this.Sound_Music.setVolume(0.1);
 
     // Animations
-    this.Anim_ShooterEnemy = new Animation("/Resources/Sprites/ShooterEnemy00.png", "/Resources/Sprites/ShooterEnemy07.png");
-    this.Anim_PlayerBullet = new Animation("/Resources/Sprites/PlayerBullet00.png", "/Resources/Sprites/PlayerBullet07.png");
-    this.Anim_BasicEnemy = new Animation("/Resources/Sprites/BasicEnemy00.png", "/Resources/Sprites/BasicEnemy07.png");
-    this.Anim_Player = new Animation("/Resources/Sprites/Player00.png", "/Resources/Sprites/Player07.png");
-    this.Anim_Explosion = new Animation("/Resources/Sprites/Explosion00.png", "/Resources/Sprites/Explosion04.png");
+    this.Anim_ShooterEnemy = new Animation("//Resources/Sprites/ShooterEnemy00.png", "//Resources/Sprites/ShooterEnemy07.png");
+    this.Anim_PlayerBullet = new Animation("//Resources/Sprites/PlayerBullet00.png", "//Resources/Sprites/PlayerBullet07.png");
+    this.Anim_BasicEnemy = new Animation("//Resources/Sprites/BasicEnemy00.png", "//Resources/Sprites/BasicEnemy07.png");
+    this.Anim_Player = new Animation("//Resources/Sprites/Player00.png", "//Resources/Sprites/Player07.png");
+    this.Anim_Explosion = new Animation("//Resources/Sprites/Explosion00.png", "//Resources/Sprites/Explosion04.png");
 
     // Gameplay Vars
     this.Score = 0;

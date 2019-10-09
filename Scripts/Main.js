@@ -16,7 +16,7 @@ function preload() {
   splashScreen = new SplashScreen(1080, 600);
 
   // I like this font
-  retroFont = loadFont("Resources/Fonts/ARCADECLASSIC.ttf");
+  retroFont = loadFont("//Resources/Fonts/ARCADECLASSIC.ttf");
 }
 
 function setup() {
