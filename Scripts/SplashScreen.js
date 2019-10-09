@@ -74,7 +74,7 @@ class SplashScreen {
     }
 
     loadVideo() {
-        this.Ad = createVideo("/Resources/Video/5-Gum.mp4");
+        this.Ad = createVideo("Resources/Video/5-Gum.mp4");
         this.Ad.position(100, 150);
         this.Ad.size(this.CanvasX - 200, this.CanvasY - 200);
         this.Ad.hide();
