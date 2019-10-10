@@ -6,7 +6,7 @@ var gameState;
 // Currently focused game state
 var currentState;
 
-var retroFont;
+//var retroFont;
 
 function preload() {
 
@@ -16,7 +16,7 @@ function preload() {
   splashScreen = new SplashScreen(1080, 600);
 
   // I like this font
-  retroFont = loadFont("/SpaceForce/Resources/Fonts/ARCADECLASSIC.ttf");
+  //retroFont = loadFont("/SpaceForce/Resources/Fonts/ARCADECLASSIC.ttf");
 }
 
 function setup() {
@@ -26,7 +26,7 @@ function setup() {
   currentState = splashScreen;
 
   // Set the retroFont style for the entire game.
-  textFont(retroFont);
+  //textFont(retroFont);
 }
 
 function keyPressed() {
